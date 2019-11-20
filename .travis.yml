@@ -1,0 +1,20 @@
+language: julia
+os:
+  - linux
+  - osx
+julia:
+  - 1.0
+  - 1.1
+  - 1.2
+  - nightly
+notifications:
+  email: true
+git:
+  depth: 99999999
+
+script:
+    - export JULIA_PROJECT=""
+    - julia --inline=no --project -e 'using Pkg; Pkg.build(); Pkg.test(; coverage=true);'
+
+after_success:
+  - julia -e 'import Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder()); Coveralls.submit(process_folder())'
